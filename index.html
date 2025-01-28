@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eaf3fa;
+            height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 1fr 2fr;
+        }
+        .header{
+            grid-row: 1 / 2;
+            grid-column: 1 / -1;
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 1.5rem;
+        }
+        .search-section{
+            grid-row: 2 / -1;
+            grid-column: 1 / 2;
+            background-color: #f2f9ff;
+            padding: 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            border-right: 2px sloid #ccc;
+        }
+        #city-input{
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+
+        }
+        .search-btn{
+            background-color: #4a90e2 ;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor:pointer
+        }
+        .search-btn:hover {
+            background-color: #3b76ba;
+        }
+        .main-content{
+            grid-row: 2 / -1;
+            grid-column: 2 / -1;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+
+        }
+        .current-weather{
+            background-color: #d9e8f5;
+            padding: 20px;
+            border-radius: 8px;
+            width:100%;
+            max-width: 600px;
+            text-align:center;
+        }
+        .current-icon img{
+            width:60px;
+            height:60px;
+        }
+    </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Weather Dashboard</h1>
+  </header>
+  <div class="search-section">
+    <form method="POST" action="{% url 'index' %}">
+        {% csrf_token %}
+        <label for="city-input">Enter a City Name:</label>
+        <input
+        type="text"
+        id="city-input"
+        name="city"
+        placeholder="E.g., Hyderabad,Mumabai,Pune"
+        />
+        <button class="search-btn" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div>
+    <section class="current-weather">
+        {% if status == "success" %}
+        <h2>{{city}} ({{date_time}})</h2>
+        <p>Temparature:{{temp}}°C</p>
+        <p>Wind:{{wind}} km/h</p>
+        <p>Humidity:{{humidity}}%</p>
+        <p>Description:{{description }}</p>
+        <div class="current-icon">
+            <img
+            src="http://openweathermap.org/img/wn/{{ icon }}@2x.png"
+            alt="{{ description }}"
+            />
+        </div>
+        {% elif status == "notfound" %}
+        <p>City Not Found.Please try again.</p>
+        {% endif %}
+    </section>
+  </div>
+</body>
+</html>
